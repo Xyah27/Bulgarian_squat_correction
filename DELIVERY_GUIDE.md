@@ -85,8 +85,10 @@ bulgarian-split-squat/           ← CARPETA RAÍZ PARA ENTREGAR
 
 ### 📖 Para Entender el Proyecto
 1. **docs/papers/paper_bulgarian_squat_es.pdf** → Artículo científico completo
-2. **PROJECT_STRUCTURE.md** → Estructura detallada
-3. **CHANGELOG.md** → Historial de desarrollo
+2. **docs/figures/** → Gráficos y visualizaciones (14 archivos)
+3. **docs/references/** → Referencias bibliográficas (16 PDFs)
+4. **PROJECT_STRUCTURE.md** → Estructura detallada
+5. **RESULTADOS_METRICAS.md** → Métricas completas del modelo
 
 ### 🛠️ Para Desarrollar/Entrenar
 1. **scripts/training/train_bigru.py** → Entrenar modelo nuevo
@@ -217,16 +219,27 @@ from bulgarian_squat import BiGRUClassifierImproved
    - Estilo de código
    - Cómo reportar bugs
 
-5. **CHANGELOG.md**
-   - Historial de versiones
-   - Características añadidas
-   - Bugs corregidos
+4. **RESULTADOS_METRICAS.md**
+   - Métricas completas del modelo
+   - Tablas de resultados por clase
+   - Comparación con trabajos relacionados
+   - Instrucciones de compilación del paper
 
-6. **Paper Científico** (docs/papers/)
+5. **Paper Científico** (docs/papers/)
+   - **paper_bulgarian_squat_es.pdf**: Paper compilado (9 páginas)
+   - **paper_bulgarian_squat_es.tex**: Código fuente LaTeX
    - Introducción y motivación
    - Metodología completa
    - Resultados experimentales
    - Conclusiones y trabajo futuro
+
+6. **Figuras y Referencias** (docs/)
+   - **figures/**: 14 gráficos (PDF + PNG)
+     - Arquitectura del modelo
+     - Matrices de confusión
+     - Comparaciones de entrenamiento
+     - Distribución del dataset
+   - **references/**: 16 papers de referencia (PDFs)
 
 ---
 
@@ -295,13 +308,14 @@ Antes de entregar, verifica que tienes:
 
 - [ ] Carpeta completa `bulgarian-split-squat/`
 - [ ] `src/bulgarian_squat/` con 14 archivos Python
-- [ ] `scripts/` con 3 subdirectorios
-- [ ] `models/best/` con 4 archivos
+- [ ] `scripts/` con 3 subdirectorios (training, inference, utils)
+- [ ] `models/best/` con 4 archivos del modelo entrenado
 - [ ] `data/raw/` con el dataset CSV
-- [ ] `docs/papers/` con paper PDF y TEX
-- [ ] `docs/figures/` con 7 PDFs
-- [ ] `README.md` y otros 5 markdowns
-- [ ] `requirements.txt` y `setup.py`
+- [ ] `docs/papers/` con paper PDF y TEX (6 archivos)
+- [ ] `docs/figures/` con 14 archivos (7 PDFs + 7 PNGs)
+- [ ] `docs/references/` con 16 PDFs de referencias
+- [ ] `README.md`, `QUICKSTART.md`, `PROJECT_STRUCTURE.md`, `DELIVERY_GUIDE.md`, `RESULTADOS_METRICAS.md`
+- [ ] `requirements.txt`, `setup.py`, `.gitignore`, `LICENSE`
 
 ---
 

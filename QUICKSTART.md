@@ -107,10 +107,13 @@ python scripts/inference/run_webcam.py --model models/my_model --cam 0
 ## 📚 Documentación Completa
 
 Para información detallada, ver:
-- **README.md**: Documentación completa
-- **PROJECT_STRUCTURE.md**: Estructura del proyecto
-- **CONTRIBUTING.md**: Guía para contribuir
-- **docs/papers/**: Artículo científico
+- **README.md**: Documentación completa del proyecto
+- **PROJECT_STRUCTURE.md**: Estructura detallada del código
+- **DELIVERY_GUIDE.md**: Guía de entrega del proyecto
+- **RESULTADOS_METRICAS.md**: Métricas completas del modelo
+- **docs/papers/paper_bulgarian_squat_es.pdf**: Paper académico (9 páginas)
+- **docs/figures/**: Gráficos y visualizaciones (14 archivos)
+- **docs/references/**: Referencias bibliográficas (16 PDFs)
 
 ---
 

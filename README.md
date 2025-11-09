@@ -69,13 +69,19 @@ bulgarian-split-squat/
 │   └── checkpoints/              # Checkpoints de entrenamiento
 │
 ├── docs/
-│   ├── papers/                   # Artículos y documentación
-│   │   └── paper_bulgarian_squat_es.pdf
-│   └── figures/                  # Figuras y gráficos
-│       ├── architecture_diagram.pdf
-│       ├── bigru_architecture.pdf
-│       ├── confusion_matrix_normalized.pdf
-│       └── attention_weights_visualization.pdf
+│   ├── papers/                   # Paper académico
+│   │   ├── paper_bulgarian_squat_es.pdf  # Paper compilado
+│   │   └── paper_bulgarian_squat_es.tex  # Código fuente LaTeX
+│   ├── figures/                  # Figuras y gráficos (14 archivos)
+│   │   ├── architecture_diagram.pdf
+│   │   ├── bigru_architecture.pdf/png
+│   │   ├── confusion_matrix_normalized.pdf/png
+│   │   ├── attention_weights_visualization.pdf
+│   │   ├── bigru_comparison_training.pdf/png
+│   │   ├── bigru_results_comparison.pdf/png
+│   │   ├── dataset_distribution.pdf/png
+│   │   └── per_class_metrics.pdf/png
+│   └── references/               # Referencias bibliográficas (16 PDFs)
 │
 ├── configs/                      # Archivos de configuración
 ├── notebooks/                    # Jupyter notebooks de análisis

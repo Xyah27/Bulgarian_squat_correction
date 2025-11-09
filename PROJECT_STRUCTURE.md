@@ -42,16 +42,39 @@ bulgarian-split-squat/
 │       └── .gitkeep
 │
 ├── 📚 docs/                          # Documentación
-│   ├── papers/                       # Artículos y papers
-│   │   └── paper_bulgarian_squat_es.pdf
-│   └── figures/                      # Figuras y gráficos
-│       ├── architecture_diagram.pdf
-│       ├── bigru_architecture.pdf
-│       ├── confusion_matrix_normalized.pdf
-│       ├── attention_weights_visualization.pdf
-│       ├── bigru_comparison_training.pdf
-│       ├── bigru_results_comparison.pdf
-│       └── dataset_distribution.pdf
+│   ├── papers/                       # Paper académico
+│   │   ├── paper_bulgarian_squat_es.pdf   # Paper compilado
+│   │   ├── paper_bulgarian_squat_es.tex   # Código fuente LaTeX
+│   │   ├── paper_bulgarian_squat_es.aux   # Archivos auxiliares
+│   │   ├── paper_bulgarian_squat_es.log   # Log de compilación
+│   │   ├── paper_bulgarian_squat_es.out   # Output
+│   │   └── compile_output.txt             # Salida de compilación
+│   ├── figures/                      # Figuras y gráficos (14 archivos)
+│   │   ├── architecture_diagram.pdf
+│   │   ├── bigru_architecture.pdf/png
+│   │   ├── confusion_matrix_normalized.pdf/png
+│   │   ├── attention_weights_visualization.pdf
+│   │   ├── bigru_comparison_training.pdf/png
+│   │   ├── bigru_results_comparison.pdf/png
+│   │   ├── dataset_distribution.pdf/png
+│   │   └── per_class_metrics.pdf/png
+│   └── references/                   # Referencias bibliográficas (16 PDFs)
+│       ├── 1-s2.0-S0010482520300780-main.pdf
+│       ├── 1-s2.0-S0010482521001104-main.pdf
+│       ├── 1-s2.0-S1877050924033660-main.pdf
+│       ├── 1_s20_S0010482523009502_main.pdf
+│       ├── 1_s20_S096663622500178X_main.pdf
+│       ├── 1_s20_S1110016825006283_main.pdf
+│       ├── 5548-11649-1-PB.pdf
+│       ├── AI-Based_Posture_Correction_Real-Time_Exercise_Tracking_and_Feedback_using_Pose_Estimation_Technique.pdf
+│       ├── Análisis de postura y corrección de técnica en ejercicios.pdf
+│       ├── FormatoDeRevistas.pdf
+│       ├── KINOVEAPUBLICADO.pdf
+│       ├── Referencias_IEEE.txt
+│       ├── s11042_025_21050_3.pdf
+│       ├── s11760_025_04436_6.pdf
+│       ├── s41598_024_66221_8.pdf
+│       └── s43926_025_00200_x.pdf
 │
 ├── 📓 notebooks/                     # Jupyter notebooks de análisis
 │   └── .gitkeep
@@ -183,6 +206,9 @@ bulgarian-split-squat/
 ├── scripts/                  # Scripts ejecutables
 ├── models/best/              # Modelo pre-entrenado
 ├── docs/                     # Documentación
+│   ├── papers/               # Paper académico (PDF + TEX)
+│   ├── figures/              # Figuras (14 archivos PDF/PNG)
+│   └── references/           # Referencias bibliográficas (16 PDFs)
 ├── requirements.txt
 ├── setup.py
 ├── README.md

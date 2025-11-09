@@ -115,14 +115,27 @@ El dataset presenta desbalance severo con **E1 (Tronco)** como clase dominante.
 - ✅ `models/best/thr_per_class.npy` - Umbrales óptimos por clase
 
 ### Paper:
-- ✅ `docs/papers/paper_bulgarian_squat_es.tex` - LaTeX source (español)
-- ✅ `docs/papers/paper_bulgarian_squat_es.pdf` - PDF compilado (9 páginas, 533KB)
+- ✅ `docs/papers/paper_bulgarian_squat_es.tex` - Código fuente LaTeX
+- ✅ `docs/papers/paper_bulgarian_squat_es.pdf` - PDF compilado (9 páginas, 541KB)
+- ✅ `docs/papers/paper_bulgarian_squat_es.aux` - Archivo auxiliar
+- ✅ `docs/papers/paper_bulgarian_squat_es.log` - Log de compilación
+- ✅ `docs/papers/paper_bulgarian_squat_es.out` - Output
+- ✅ `docs/papers/compile_output.txt` - Salida de compilación
 
-### Figuras (7 total):
+### Figuras (14 archivos en docs/figures/):
 - ✅ `architecture_diagram.pdf` - Pipeline completo del sistema
-- ✅ `dataset_distribution.pdf` - Distribución de clases
-- ✅ `bigru_architecture.pdf` - Arquitectura del modelo
-- ✅ `bigru_comparison_training.pdf` - Curvas de entrenamiento
+- ✅ `dataset_distribution.pdf + .png` - Distribución de clases
+- ✅ `bigru_architecture.pdf + .png` - Arquitectura del modelo
+- ✅ `bigru_comparison_training.pdf + .png` - Curvas de entrenamiento
+- ✅ `bigru_results_comparison.pdf + .png` - Comparación de resultados
+- ✅ `confusion_matrix_normalized.pdf + .png` - Matriz de confusión
+- ✅ `attention_weights_visualization.pdf` - Visualización de atención
+- ✅ `per_class_metrics.pdf + .png` - Métricas por clase
+
+### Referencias (16 PDFs en docs/references/):
+- ✅ Papers de investigación relacionados
+- ✅ Referencias bibliográficas del paper
+- ✅ `Referencias_IEEE.txt` - Formato IEEE de referencias
 - ✅ `bigru_results_comparison.pdf` - Comparación de F1 scores
 - ✅ `confusion_matrix_normalized.pdf` - Matriz de confusión normalizada
 - ✅ `attention_weights_visualization.pdf` - Visualización de pesos de atención
