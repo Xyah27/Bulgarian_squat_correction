@@ -1,0 +1,32 @@
+REFERENCIAS EN FORMATO IEEE - LITERATURA PROYECTO VISION BULGARA
+==============================================================================
+
+[1] Y. Liao, A. Vakanski, M. Xian, D. Paul, and R. Baker, "A review of computational approaches for evaluation of rehabilitation exercises," Computers in Biology and Medicine, vol. 119, art. 103687, Apr. 2020. doi: 10.1016/j.compbiomed.2020.103687
+
+[2] N. K. Mangal and A. K. Tiwari, "A review of the evolution of scientific literature on technology-assisted approaches using RGB-D sensors for musculoskeletal health monitoring," Computers in Biology and Medicine, vol. 132, art. 104316, May 2021. doi: 10.1016/j.compbiomed.2021.104316
+
+[3] W. Simoes, L. Reis, C. Araujo, and J. Maia Jr., "Accuracy assessment of 2D pose estimation with MediaPipe for physiotherapy exercises," in Proc. 14th International Conference on Current and Future Trends of Information and Communication Technologies in Healthcare (ICTH 2024), Leuven, Belgium, Oct. 28-30, 2024, pp. 446-453. doi: 10.1016/j.procs.2024.11.132
+
+[4] C. Mennella, U. Maniscalco, G. De Pietro, and M. Esposito, "A deep learning system to monitor and assess rehabilitation exercises in home-based remote and unsupervised conditions," Computers in Biology and Medicine, vol. 166, art. 107485, Nov. 2023. doi: 10.1016/j.compbiomed.2023.107485
+
+[5] Y. Y. Lee, L. Fennen, and R. Dubbeldam, "Validation of a video-based pose estimation algorithm for the assessment of balance error scoring system in single limb stance test," Gait & Posture, 2025. doi: 10.1016/j.gaitpost.2025.01.178
+
+[6] G. Cai and G. Zhang, "Application of Swin-UNet and pose estimation-based athlete motion quality detection device in IoT systems," Alexandria Engineering Journal, 2025. doi: 10.1016/j.aej.2025.01.283
+
+[7] A. Hernández-Rayas, R. Guzman-Cabrera, and M. Cervantes-Becerra, "Postural rehabilitation with machine vision," 2025.
+
+[8] K. Manikandan, G. V. S. Vignesh, and S. Palaniswamy, "AI-based posture correction, real-time exercise tracking and feedback using pose estimation technique," in Proc. IEEE Conference on Computational Intelligence and Systems (CCIS), Dec. 2024. doi: 10.1109/CCIS63231.2024.10932054
+
+[9] F. B. Pereira and M. L. F. Freitas, "Técnica del vídeo análisis con KINOVEA. Potencialidades y resultados de su utilización en el deporte en Timor Leste," Jul. 2024.
+
+[10] A. Chander, D. R. Bathula, and A. K. Sahani, "Towards an RGB camera-based rehabilitation exercise assessment using an enhanced spatio-temporal transformer framework," Multimedia Tools and Applications, 2025. doi: 10.1007/s11042-025-21050-3
+
+[11] S.-C. Yeh and C.-K. Yang, "Yoga pose recognition and motion analysis for a home-based fitness monitoring and health management system," Signal, Image and Video Processing, vol. 19, art. 841, 2025. doi: 10.1007/s11760-025-04436-6
+
+[12] W. Zhang, Y. Li, S. Cai, Z. Wang, X. Cheng, N. Somjit, D. Sun, and F. Chen, "Combined MediaPipe and YOLOv5 range of motion assessment system for spinal diseases and frozen shoulder," Scientific Reports, vol. 14, art. 15879, Jul. 2024. doi: 10.1038/s41598-024-66221-8
+
+[13] M. Rajesh, R. Sitharthan, R. G. Babu, U. Moorthy, and S. V. Easwaramoorthy, "Spatiotemporal neural radiance fields for AI driven motion quality analysis," Discover Internet of Things, vol. 5, art. 91, 2025. doi: 10.1007/s43926-025-00200-x
+
+==============================================================================
+Total de referencias: 13
+Fecha de compilación: Noviembre 6, 2025
