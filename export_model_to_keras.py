@@ -1,11 +1,29 @@
 """
 Script para exportar el modelo PyTorch BiGRU a formato Keras/H5
 Para entregar el modelo entrenado en formato compatible
+
+NOTA IMPORTANTE:
+Este script requiere TensorFlow instalado para funcionar.
+Si no se necesita conversión a Keras, el modelo está disponible en formato PyTorch (.pt)
+en la carpeta models/entrega/bulgarian_squat_model.pt
+
+Para instalar TensorFlow:
+    pip install tensorflow
+
+Los errores de importación de TensorFlow son esperados si no está instalado.
 """
 
 import torch
-import tensorflow as tf
-from tensorflow import keras
+# TensorFlow imports - pueden fallar si no está instalado (esperado)
+try:
+    import tensorflow as tf
+    from tensorflow import keras
+    TENSORFLOW_AVAILABLE = True
+except ImportError:
+    TENSORFLOW_AVAILABLE = False
+    print("⚠️  TensorFlow no está instalado. Este script no podrá ejecutarse.")
+    print("   Instalar con: pip install tensorflow")
+
 import numpy as np
 import json
 import os
@@ -39,7 +57,10 @@ def create_keras_model():
     Crea un modelo Keras equivalente al BiGRU de PyTorch
     Arquitectura: BiGRU(128) -> BiGRU(64) -> Attention -> Dense(4)
     """
-    from tensorflow.keras import layers, Model
+    if not TENSORFLOW_AVAILABLE:
+        raise ImportError("TensorFlow no está instalado. Instalar con: pip install tensorflow")
+    
+    from tensorflow.keras import layers, Model  # type: ignore
     
     # Input
     input_layer = layers.Input(shape=(None, 66), name='sequence_input')
@@ -171,4 +192,17 @@ def main():
     print("\n✓ El modelo PyTorch original sigue disponible en: models/best/best_model_bigru.pt")
 
 if __name__ == '__main__':
+    if not TENSORFLOW_AVAILABLE:
+        print("\n" + "=" * 70)
+        print("ERROR: TensorFlow no está instalado")
+        print("=" * 70)
+        print("\nEste script requiere TensorFlow para funcionar.")
+        print("\nPara instalar TensorFlow:")
+        print("  pip install tensorflow")
+        print("\n" + "=" * 70)
+        print("NOTA: El modelo PyTorch (.pt) está disponible en:")
+        print("  models/entrega/bulgarian_squat_model.pt")
+        print("=" * 70)
+        exit(1)
+    
     main()

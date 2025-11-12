@@ -64,9 +64,20 @@ Institución: Universidad San Buenaventura
 __version__ = "1.0.0"
 __author__ = "Juan Jose Núñez, Juan Jose Castro"
 
+# ============================================================================
+# IMPORTACIONES OPCIONALES
+# ============================================================================
+# Los siguientes módulos pueden no existir aún en el proyecto.
+# Los errores de importación son manejados con try/except y son esperados.
+# Si necesitas estas funcionalidades, crea los archivos correspondientes en:
+#   - scripts/utils/visualization.py
+#   - scripts/utils/metrics.py
+#   - scripts/utils/video_utils.py
+# ============================================================================
+
 # Importar funciones principales de visualización
 try:
-    from .visualization import (
+    from .visualization import (  # type: ignore
         plot_training_history,
         plot_confusion_matrix,
         plot_per_class_metrics,
@@ -88,7 +99,7 @@ except ImportError:
 
 # Importar funciones de métricas
 try:
-    from .metrics import (
+    from .metrics import (  # type: ignore
         compute_classification_metrics,
         generate_classification_report,
         calculate_macro_f1,
@@ -109,7 +120,7 @@ except ImportError:
 
 # Importar utilidades de video
 try:
-    from .video_utils import (
+    from .video_utils import (  # type: ignore
         extract_frames,
         save_video_with_overlay,
         resize_frame,
