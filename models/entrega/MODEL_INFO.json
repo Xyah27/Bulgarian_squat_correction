@@ -1,0 +1,45 @@
+{
+  "nombre": "Bulgarian Split Squat Posture Classifier",
+  "framework": "PyTorch",
+  "arquitectura": "BiGRU + Attention + BatchNorm",
+  "version": "1.0.0",
+  "parametros_totales": 292041,
+  "input_shape": [
+    null,
+    66
+  ],
+  "output_shape": [
+    4
+  ],
+  "clases": [
+    "E0_correcta",
+    "E1_inclinacion_tronco",
+    "E2_valgo_rodilla",
+    "E3_profundidad_insuficiente"
+  ],
+  "metricas": {
+    "f1_macro": 0.5198,
+    "f1_micro": 0.5838,
+    "accuracy": 0.6574
+  },
+  "configuracion": {
+    "hidden_sizes": [
+      128,
+      64
+    ],
+    "dropout": 0.3,
+    "num_classes": 4,
+    "input_dim": 66
+  },
+  "umbrales_optimos": [
+    0.31,
+    0.19,
+    0.1,
+    0.7
+  ],
+  "entrenamiento": {
+    "epochs": 50,
+    "batch_size": 32,
+    "learning_rate": 0.001
+  }
+}
