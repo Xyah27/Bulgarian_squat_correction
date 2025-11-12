@@ -16,8 +16,8 @@ Los errores de importación de TensorFlow son esperados si no está instalado.
 import torch
 # TensorFlow imports - pueden fallar si no está instalado (esperado)
 try:
-    import tensorflow as tf
-    from tensorflow import keras
+    import tensorflow as tf  # type: ignore[import-not-found]
+    from tensorflow import keras  # type: ignore[import-not-found]
     TENSORFLOW_AVAILABLE = True
 except ImportError:
     TENSORFLOW_AVAILABLE = False
