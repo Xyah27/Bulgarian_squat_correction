@@ -15,6 +15,9 @@
 \usepackage{float}
 \usepackage{hyperref}
 
+% Configurar ruta de figuras
+\graphicspath{{../figures/}}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -135,7 +138,7 @@ Esta sección describe la arquitectura del sistema propuesto, construcción del 
 La Figura~\ref{fig:system_architecture} ilustra el pipeline completo del sistema propuesto. El sistema comprende cuatro módulos principales: (1) \textit{Adquisición de Video}, donde video RGB se captura a 30 FPS usando una cámara de consumidor; (2) \textit{Estimación de Pose}, aprovechando MediaPipe Pose para extraer 33 puntos de referencia 3D por fotograma; (3) \textit{Extracción de Características}, computando atributos biomecánicos y normalizando coordenadas; y (4) \textit{Clasificación}, donde un modelo BiGRU entrenado predice etiquetas de error con puntajes de confianza asociados.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/architecture_diagram.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{architecture_diagram.pdf}}
 \caption{Pipeline completo del sistema desde adquisición de video hasta clasificación de errores. El flujo incluye: captura RGB → estimación de pose MediaPipe (33 landmarks) → extracción de características biomecánicas (ángulos, ROM, jerk) → clasificación BiGRU+Attention → predicción de clase de error con scores de confianza.}
 \label{fig:system_architecture}
 \end{figure}
@@ -169,7 +172,7 @@ El conjunto de datos final balanceado comprende 16,501 muestras distribuidas ent
 El dataset fue balanceado mediante técnicas de data augmentation para garantizar representación equitativa de todas las clases. Los datos se dividieron 70/15/15 para entrenamiento (11,551), validación (2,475) y prueba (2,475) usando \textbf{GroupShuffleSplit por video\_id} para garantizar independencia entre conjuntos y prevenir fuga de información.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\columnwidth]{figures/dataset_distribution.pdf}}
+\centerline{\includegraphics[width=0.9\columnwidth]{dataset_distribution.pdf}}
 \caption{Distribución de clases en el conjunto de datos balanceado mostrando representación equitativa de las 4 categorías de error mediante data augmentation (16,501 muestras totales).}
 \label{fig:dataset_distribution}
 \end{figure}
@@ -268,7 +271,7 @@ El clasificador BiGRU+Attention representa la arquitectura final del sistema, se
 \end{itemize}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.7\columnwidth]{figures/bigru_architecture.pdf}}
+\centerline{\includegraphics[width=0.7\columnwidth]{bigru_architecture.pdf}}
 \caption{Arquitectura BiGRU+Attention mostrando el flujo desde la entrada (T×66) hasta la salida de 4 clases. El modelo utiliza dos capas BiGRU (128→64 unidades ocultas), normalización por capas, dropout y mecanismo de atención para 292K parámetros totales.}
 \label{fig:bigru_architecture}
 \end{figure}
@@ -412,7 +415,7 @@ Tiempo inferencia & <50ms & Por secuencia completa \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/bigru_comparison_training.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{bigru_comparison_training.pdf}}
 \caption{Curvas de entrenamiento del modelo BiGRU+Attention a través de 50 epochs. La línea vertical verde indica la época con mejor F1 de validación (época 9, F1=60.68\%). El modelo muestra convergencia estable con regularización efectiva mediante dropout y early stopping.}
 \label{fig:training_curves}
 \end{figure}
@@ -461,7 +464,7 @@ E3 (Profundidad) & 90 & 88 & 89 & Variable \\
 La Figura~\ref{fig:confusion_matrix} presenta la matriz de confusión para BiGRU+Attention, mostrando tanto valores absolutos como proporciones normalizadas por fila (recall).
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/confusion_matrix_normalized.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{confusion_matrix_normalized.pdf}}
 \caption{Matriz de confusión del modelo BiGRU+Attention en el conjunto de test balanceado. Izquierda: valores absolutos. Derecha: normalizada por fila (recall). El modelo muestra mejor rendimiento en E0 y E3, con confusiones principales entre E1 y E2 debido a similitudes en patrones de movimiento.}
 \label{fig:confusion_matrix}
 \end{figure}
@@ -516,7 +519,7 @@ BiGRU sin atención & 58.9 & 46.7 \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/bigru_results_comparison.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{bigru_results_comparison.pdf}}
 \caption{Comparación de arquitecturas mostrando que BiGRU con atención supera a BiLSTM baseline en +13.44 puntos de accuracy y +10.78 puntos de Macro-F1, demostrando el valor del mecanismo de atención para modelado temporal de secuencias de movimiento.}
 \label{fig:ablation_comparison}
 \end{figure}
@@ -540,7 +543,7 @@ BiGRU sin atención & 58.9 & 46.7 \\
 La Figura~\ref{fig:per_class_metrics} desglosa las métricas de clasificación (precisión, recall y F1-score) para cada clase de error presente en el conjunto de test.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/per_class_metrics.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{per_class_metrics.pdf}}
 \caption{Métricas de clasificación por clase en el conjunto de test. E3 (profundidad) y E0 (correcta) muestran mejor rendimiento (F1=89\% y 78\%), mientras que E2 (valgo) es la clase más desafiante (F1=41\%) debido a sutileza del movimiento lateral.}
 \label{fig:per_class_metrics}
 \end{figure}
@@ -558,7 +561,7 @@ La Figura~\ref{fig:per_class_metrics} desglosa las métricas de clasificación (
 El mecanismo de atención en el modelo BiGRU+Attention permite visualizar qué pasos temporales (fotogramas) del ciclo de movimiento son más relevantes para la clasificación de cada error. La Figura~\ref{fig:attention_weights} muestra los pesos de atención promedio a través de la secuencia temporal para las clases presentes en el dataset.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{figures/attention_weights_visualization.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{attention_weights_visualization.pdf}}
 \caption{Visualización de pesos de atención promedio a través de pasos temporales para cada clase de error. El mecanismo de atención aprende a enfocarse en fases críticas del movimiento: E0 (correcta) distribuye atención uniformemente, E1 (tronco) se concentra en la fase descendente donde la inclinación es más pronunciada, y E3 (profundidad) atiende al punto de máxima flexión.}
 \label{fig:attention_weights}
 \end{figure}
