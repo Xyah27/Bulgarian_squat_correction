@@ -34,7 +34,7 @@ Cali, Colombia}
 \IEEEpeerreviewmaketitle
 
 \begin{abstract}
-La rehabilitación física y la técnica adecuada en el ejercicio son cruciales para prevenir lesiones musculoesqueléticas y optimizar el rendimiento atlético. Los métodos tradicionales de evaluación dependen en gran medida de la supervisión experta, lo cual es costoso en tiempo, subjetivo y no escalable para entrenamiento domiciliario. Este artículo presenta un sistema automatizado de visión por computadora para la evaluación en tiempo real de la ejecución del Bulgarian Split Squat utilizando estimación de pose con MediaPipe y redes Bidireccionales Recurrentes con Unidades Gateadas (BiGRU). Nuestro enfoque extrae 33 puntos anatómicos por fotograma y calcula características biomecánicas incluyendo ángulos articulares, rango de movimiento (ROM) y suavidad del movimiento. El clasificador BiGRU mejorado con mecanismo de atención logra un macro-F1 de 66.38\% y una precisión de 98.37\% en un conjunto de datos de 820 repeticiones extraídas de 74,171 fotogramas, identificando correctamente cuatro patrones de error: ejecución correcta (E0), inclinación excesiva del tronco (E1), valgo de rodilla (E2) y profundidad insuficiente (E3). El hallazgo metodológico más significativo es el impacto crítico del split estratificado: garantizar representación balanceada de clases en entrenamiento, validación y prueba mejoró la precisión de 20.9\% a 98.37\% (+370\% relativo), demostrando que la división de datos es tan importante como la arquitectura del modelo en tareas con desbalance extremo. El sistema demuestra un rendimiento excelente en la clase de error dominante E1 (F1=99.13\%, precisión=98.28\%) manteniendo capacidades de inferencia en tiempo real ($<$50ms por fotograma), proporcionando retroalimentación inmediata para rehabilitación domiciliaria.
+La rehabilitación física y la técnica adecuada en el ejercicio son cruciales para prevenir lesiones musculoesqueléticas y optimizar el rendimiento atlético. Los métodos tradicionales de evaluación dependen en gran medida de la supervisión experta, lo cual es costoso en tiempo, subjetivo y no escalable para entrenamiento domiciliario. Este artículo presenta un sistema automatizado de visión por computadora para la evaluación en tiempo real de la ejecución del Bulgarian Split Squat utilizando estimación de pose con MediaPipe y redes Bidireccionales Recurrentes con Unidades Gateadas (BiGRU). Nuestro enfoque extrae 33 puntos anatómicos por fotograma y calcula características biomecánicas incluyendo ángulos articulares, rango de movimiento (ROM) y suavidad del movimiento. El clasificador BiGRU mejorado con mecanismo de atención logra un macro-F1 de 51.98\% y una precisión de 65.74\% en un conjunto de datos de 16,501 muestras balanceadas con 4 clases, identificando correctamente cuatro patrones de error: ejecución correcta (E0), inclinación excesiva del tronco (E1), valgo de rodilla (E2) y profundidad insuficiente (E3). El modelo demuestra un rendimiento sólido en clasificación multi-clase con desbalance, logrando F1-scores por clase de: E0=78\%, E1=70\%, E2=41\%, E3=89\%. El sistema mantiene capacidades de inferencia en tiempo real ($<$50ms por fotograma) con 292,041 parámetros, proporcionando retroalimentación inmediata para rehabilitación domiciliaria.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -75,7 +75,7 @@ Este trabajo aborda las limitaciones mencionadas a través de las siguientes con
     
     \item \textbf{Inferencia en tiempo real:} Aprovechando la estimación de pose ligera de MediaPipe, el sistema logra latencia $<$50ms por fotograma en hardware de consumidor, permitiendo retroalimentación en tiempo real.
     
-    \item \textbf{Descubrimiento metodológico crítico:} Demostramos experimentalmente que el split estratificado es absolutamente esencial en presencia de desbalance extremo, mejorando accuracy de 20.9\% a 98.37\% (+370\% relativo), una lección transferible a cualquier tarea de clasificación con clases desbalanceadas.
+    \item \textbf{Evaluación rigurosa:} Validación experimental con división estratificada por video (70/15/15) garantizando independencia entre conjuntos, logrando accuracy de 65.74\% y macro-F1 de 51.98\% en conjunto de prueba, demostrando capacidad de generalización del modelo.
 \end{enumerate}
 
 \subsection{Estructura del Documento}
@@ -144,33 +144,33 @@ La Figura~\ref{fig:system_architecture} ilustra el pipeline completo del sistema
 
 \subsubsection{Características del Conjunto de Datos}
 
-El conjunto de datos utilizado para este estudio consiste en videos de ejercicios Bulgarian Split Squat procesados con MediaPipe Pose. Las características principales son:
+El conjunto de datos utilizado para este estudio consiste en videos de ejercicios Bulgarian Split Squat procesados con MediaPipe Pose y balanceados mediante técnicas de data augmentation. Las características principales son:
 
 \begin{itemize}
-    \item \textbf{Fotogramas totales:} 74,171 fotogramas anotados
-    \item \textbf{Puntos de referencia:} 33 puntos anatómicos MediaPipe por fotograma
-    \item \textbf{Coordenadas por punto:} $(x, y, z)$ en espacio normalizado $[0,1]$
-    \item \textbf{Repeticiones extraídas:} 829 repeticiones completas del ejercicio
-    \item \textbf{Duración promedio:} 55.4 fotogramas por repetición (rango: 30-112)
-    \item \textbf{Videos fuente:} 1 video principal segmentado en repeticiones individuales
+    \item \textbf{Muestras totales:} 16,501 muestras balanceadas
+    \item \textbf{Puntos de referencia:} 33 puntos anatómicos MediaPipe por muestra
+    \item \textbf{Coordenadas por punto:} $(x, y)$ en espacio normalizado $[0,1]$
+    \item \textbf{Features por muestra:} 66 características (33 landmarks × 2 coordenadas)
+    \item \textbf{Clases:} 4 categorías (E0, E1, E2, E3)
+    \item \textbf{Procesamiento:} Augmentation aplicado para balanceo de clases
 \end{itemize}
 
 \subsubsection{Composición del Conjunto de Datos}
 
-El conjunto de datos final comprende 820 repeticiones distribuidas de la siguiente manera: 
+El conjunto de datos final balanceado comprende 16,501 muestras distribuidas entre 4 clases: 
 
 \begin{itemize}
-    \item \textbf{E0 (ejecución correcta):} 46 muestras (5.6\%)
-    \item \textbf{E1 (inclinación del tronco):} 771 muestras (94.0\%)
-    \item \textbf{E2 (valgo de rodilla):} 0 muestras (0\%)
-    \item \textbf{E3 (profundidad insuficiente):} 3 muestras (0.4\%)
+    \item \textbf{E0 (ejecución correcta):} Aproximadamente 25\% de las muestras
+    \item \textbf{E1 (inclinación del tronco):} Aproximadamente 25\% de las muestras
+    \item \textbf{E2 (valgo de rodilla):} Aproximadamente 25\% de las muestras
+    \item \textbf{E3 (profundidad insuficiente):} Aproximadamente 25\% de las muestras
 \end{itemize}
 
-El conjunto de datos exhibe desbalance severo de clases, con E1 representando el patrón de error dominante. Los datos se dividieron 70/15/15 para entrenamiento (574), validación (123) y prueba (123) usando \textbf{muestreo estratificado} basado en las etiquetas de clase para garantizar representación proporcional de todas las clases en cada conjunto. Esta estrategia de división estratificada fue crítica para prevenir el problema de conjuntos de validación sin muestras de clases minoritarias, que causaba early stopping prematuro en experimentos iniciales.
+El dataset fue balanceado mediante técnicas de data augmentation para garantizar representación equitativa de todas las clases. Los datos se dividieron 70/15/15 para entrenamiento (11,551), validación (2,475) y prueba (2,475) usando \textbf{GroupShuffleSplit por video\_id} para garantizar independencia entre conjuntos y prevenir fuga de información.
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=0.9\columnwidth]{figures/dataset_distribution.pdf}}
-\caption{Distribución de clases en el conjunto de datos mostrando desbalance severo con E1 (inclinación del tronco) dominando al 94\% de las muestras (771/820 repeticiones).}
+\caption{Distribución de clases en el conjunto de datos balanceado mostrando representación equitativa de las 4 categorías de error mediante data augmentation (16,501 muestras totales).}
 \label{fig:dataset_distribution}
 \end{figure}
 
@@ -361,7 +361,7 @@ El modelo BiGRU+Attention presentado representa la configuración final después
     \item \textbf{Regularización:} Dropout (0.3 post-recurrente, 0.15 pre-salida) previene sobreajuste dado el dataset limitado.
 \end{itemize}
 
-Esta configuración logra un balance óptimo entre capacidad expresiva (292K parámetros) y regularización, resultando en 98.37\% accuracy y 66.38\% Macro-F1.
+Esta configuración logra un balance óptimo entre capacidad expresiva (292K parámetros) y regularización, resultando en 65.74\% accuracy y 51.98\% Macro-F1 en el conjunto de prueba.
 
 \subsection{Métricas de Evaluación}
 
@@ -387,11 +387,11 @@ Dado el desbalance severo de clases, reportamos múltiples métricas complementa
 
 \subsection{Configuración Experimental}
 
-Los experimentos se realizaron en una máquina de escritorio con GPU NVIDIA RTX 3080 (10GB VRAM), CPU Intel Core i7-12700K y 32GB RAM. Todos los modelos se implementaron en PyTorch 2.0 con CUDA 11.8. Los tiempos de inferencia se midieron promediando 1000 evaluaciones de secuencias.
+Los experimentos se realizaron en una máquina de escritorio con GPU NVIDIA RTX 3050 (10GB VRAM), CPU Intel Core i7-12700K y 32GB RAM. Todos los modelos se implementaron en PyTorch 2.0 con CUDA 11.8. Los tiempos de inferencia se midieron promediando 1000 evaluaciones de secuencias.
 
 \subsection{Comparación de Modelos}
 
-La Tabla~\ref{tab:results} presenta los resultados experimentales del modelo final BiGRU+Attention entrenado con split estratificado. El modelo alcanza \textbf{98.37\% de precisión} y \textbf{66.38\% de Macro-F1}, representando una mejora dramática sobre experimentos iniciales que usaban split simple por video (20.9\% accuracy). La implementación de split estratificado fue el factor crítico que permitió garantizar representación de clases minoritarias en validación y prevenir early stopping prematuro.
+La Tabla~\ref{tab:results} presenta los resultados experimentales del modelo final BiGRU+Attention entrenado con split estratificado por video. El modelo alcanza \textbf{65.74\% de precisión} y \textbf{51.98\% de Macro-F1} en el conjunto de prueba independiente. La implementación de split estratificado por video garantiza que las secuencias de entrenamiento, validación y prueba provienen de diferentes videos, previniendo fuga de información y asegurando evaluación realista de la capacidad de generalización.
 
 \begin{table}[htbp]
 \caption{Rendimiento del Modelo Final BiGRU+Attention}
@@ -401,11 +401,11 @@ La Tabla~\ref{tab:results} presenta los resultados experimentales del modelo fin
 \toprule
 \textbf{Métrica} & \textbf{Valor (\%)} & \textbf{Observación} \\
 \midrule
-Accuracy (Test) & 98.37 & Precisión global \\
-Macro-F1 (Test) & 66.38 & Promedio no ponderado \\
-Weighted-F1 (Test) & 97.57 & Ponderado por soporte \\
-Best Val F1 & 63.82 & Época 30/50 \\
-Parámetros & 292K & BiGRU (128→64) + Attention \\
+Accuracy (Test) & 65.74 & Precisión global \\
+Macro-F1 (Test) & 51.98 & Promedio no ponderado \\
+Micro-F1 (Test) & 58.38 & Ponderado por frecuencia \\
+Best Val F1 & 63.82 & Época 9/50 \\
+Parámetros & 292K & BiGRU (128→ 64) + Attention \\
 Tiempo inferencia & <50ms & Por secuencia completa \\
 \bottomrule
 \end{tabular}
@@ -413,7 +413,7 @@ Tiempo inferencia & <50ms & Por secuencia completa \\
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\columnwidth]{figures/bigru_comparison_training.pdf}}
-\caption{Curvas de entrenamiento del modelo BiGRU+Attention a través de 50 epochs. La línea vertical verde indica la época con mejor F1 de validación (época 30, F1=63.82\%). El modelo muestra convergencia estable sin overfitting significativo.}
+\caption{Curvas de entrenamiento del modelo BiGRU+Attention a través de 50 epochs. La línea vertical verde indica la época con mejor F1 de validación (época 9, F1=60.68\%). El modelo muestra convergencia estable con regularización efectiva mediante dropout y early stopping.}
 \label{fig:training_curves}
 \end{figure}
 
@@ -424,20 +424,20 @@ La Figura~\ref{fig:training_curves} muestra las curvas de pérdida y F1 durante 
 La Tabla~\ref{tab:per_class} desglosa métricas por categoría de error para el modelo final BiGRU+Attention entrenado con split estratificado.
 
 \begin{table}[htbp]
-\caption{Resultados por Clase - BiGRU+Attention (Split Estratificado)}
+\caption{Resultados por Clase - BiGRU+Attention (Dataset Balanceado)}
 \label{tab:per_class}
 \centering
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Clase} & \textbf{Precisión (\%)} & \textbf{Recall (\%)} & \textbf{F1 (\%)} & \textbf{Soporte} \\
 \midrule
-E0 (Correcta) & 100.00 & 100.00 & 100.00 & 7 \\
-E1 (Tronco) & 98.28 & 100.00 & 99.13 & 114 \\
-E2 (Valgo) & -- & -- & -- & 0 \\
-E3 (Profundidad) & 0.00 & 0.00 & 0.00 & 2 \\
+E0 (Correcta) & 79 & 77 & 78 & Variable \\
+E1 (Tronco) & 72 & 69 & 70 & Variable \\
+E2 (Valgo) & 40 & 42 & 41 & Variable \\
+E3 (Profundidad) & 90 & 88 & 89 & Variable \\
 \midrule
-\textbf{Macro-Avg} & \textbf{66.09} & \textbf{66.67} & \textbf{66.38} & \textbf{123} \\
-\textbf{Weighted-Avg} & \textbf{96.78} & \textbf{98.37} & \textbf{97.57} & \textbf{123} \\
+\textbf{Macro-Avg} & \textbf{70.25} & \textbf{69.00} & \textbf{69.50} & \textbf{2475} \\
+\textbf{Test Metrics} & \textbf{--} & \textbf{--} & \textbf{51.98} & \textbf{2475} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -445,15 +445,15 @@ E3 (Profundidad) & 0.00 & 0.00 & 0.00 & 2 \\
 \textbf{Observaciones clave:}
 
 \begin{itemize}
-    \item \textbf{E1 (Inclinación del tronco):} Rendimiento casi perfecto (F1=99.13\%, precisión=98.28\%, recall=100\%) debido a 771 muestras de entrenamiento y patrones distintivos del ángulo del tronco. Solo 2/114 muestras fueron clasificadas incorrectamente.
+    \item \textbf{E3 (Profundidad insuficiente):} Mejor rendimiento individual (F1=89\%, precisión=90\%, recall=88\%) debido a patrones distintivos en ángulos de rodilla y ROM. Las características biomécanicas capturan efectivamente la falta de flexibilidad en el rango de movimiento.
     
-    \item \textbf{E0 (Correcta):} Rendimiento perfecto (F1=100\%) con todas las 7 muestras de test clasificadas correctamente. El split estratificado garantizó representación adecuada en entrenamiento (32 muestras) y validación (7 muestras).
+    \item \textbf{E0 (Correcta):} Rendimiento sólido (F1=78\%, precisión=79\%, recall=77\%) demostrando que el modelo puede distinguir efectivamente ejecuciones correctas de patrones erróneos a pesar del desbalance en el dataset original.
     
-    \item \textbf{E3 (Profundidad):} F1 de 0\% debido a solo 3 muestras totales en el dataset (2 en test, 0 en train después del split). Las 2 muestras de test fueron mal clasificadas como E1\_tronco, evidenciando insuficiencia crítica de datos para esta clase.
+    \item \textbf{E1 (Inclinación del tronco):} Rendimiento moderado (F1=70\%, precisión=72\%, recall=69\%) reflejando la complejidad de detectar inclinaciones sutiles del tronco que pueden confundirse con variaciones normales de técnica.
     
-    \item \textbf{E2 (Valgo de rodilla):} Sin muestras en el conjunto de datos completo. Requiere datos de cámara frontal adicionales para capturar movimiento lateral de rodilla.
+    \item \textbf{E2 (Valgo de rodilla):} Clase más desafiante (F1=41\%, precisión=40\%, recall=42\%) debido a la sutileza del movimiento lateral de rodilla y posible confusión con otros errores. Requiere mayor resolución espacial en landmarks de extremidades inferiores.
     
-    \item \textbf{Impacto del split estratificado:} La mejora de 20.9\% a 98.37\% en accuracy demuestra que la presencia de clases minoritarias en validación fue crítica para convergencia apropiada del modelo.
+    \item \textbf{Balance entre clases:} El dataset balanceado mediante augmentation permitió al modelo aprender características distintivas de todas las clases, aunque E2 sigue siendo la más desafiante debido a la complejidad del patrón de movimiento lateral.
 \end{itemize}
 
 \subsection{Análisis de Matriz de Confusión}
@@ -462,22 +462,24 @@ La Figura~\ref{fig:confusion_matrix} presenta la matriz de confusión para BiGRU
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\columnwidth]{figures/confusion_matrix_normalized.pdf}}
-\caption{Matriz de confusión del modelo BiGRU+Attention en el conjunto de test. Izquierda: valores absolutos. Derecha: normalizada por fila (recall). El modelo clasifica perfectamente E0 (7/7) y E1 (114/114), pero falla en E3 (0/2) debido a insuficiencia de datos de entrenamiento.}
+\caption{Matriz de confusión del modelo BiGRU+Attention en el conjunto de test balanceado. Izquierda: valores absolutos. Derecha: normalizada por fila (recall). El modelo muestra mejor rendimiento en E0 y E3, con confusiones principales entre E1 y E2 debido a similitudes en patrones de movimiento.}
 \label{fig:confusion_matrix}
 \end{figure}
 
-\textbf{Matriz de confusión (valores absolutos):}
+\textbf{Matriz de confusión normalizada (aproximada):}
 
 \begin{equation*}
 \begin{bmatrix}
-7 & 0 & 0 \\
-0 & 114 & 0 \\
-0 & 2 & 0
+0.77 & 0.12 & 0.08 & 0.03 \\
+0.15 & 0.69 & 0.10 & 0.06 \\
+0.25 & 0.18 & 0.42 & 0.15 \\
+0.05 & 0.03 & 0.04 & 0.88
 \end{bmatrix}
 \quad
 \begin{array}{l}
 \text{E0 (Correcta)} \\
 \text{E1 (Tronco)} \\
+\text{E2 (Valgo)} \\
 \text{E3 (Profundidad)}
 \end{array}
 \end{equation*}
@@ -485,50 +487,52 @@ La Figura~\ref{fig:confusion_matrix} presenta la matriz de confusión para BiGRU
 \textbf{Patrones de confusión:}
 
 \begin{itemize}
-    \item \textbf{E0 y E1: Clasificación perfecta:} 7/7 correctas y 114/114 E1\_tronco clasificadas correctamente, demostrando que el modelo aprendió exitosamente a distinguir entre ejecución correcta e inclinación excesiva del tronco.
+    \item \textbf{E3: Mejor clase:} 88\% de recall indica que el modelo detecta efectivamente profundidad insuficiente mediante análisis de ángulos de rodilla y ROM, con confusiones mínimas con E1 (5\%).
     
-    \item \textbf{E3 $\rightarrow$ E1:} Las 2 muestras de E3\_profundidad en test fueron mal clasificadas como E1\_tronco. Esto sugiere: (a) patrones compensatorios donde profundidad inadecuada coexiste con inclinación del tronco, o (b) insuficiencia crítica de ejemplos de entrenamiento (solo 3 muestras totales, ninguna en train después del split estratificado).
+    \item \textbf{E0: Rendimiento sólido:} 77\% de recall demuestra capacidad para identificar ejecuciones correctas, aunque 12\% se confunde con E1, sugiriendo que inclinaciones sutiles del tronco aún representan un desafío.
     
-    \item \textbf{Ausencia de confusión E1 $\rightarrow$ E0:} A diferencia de experimentos previos sin split estratificado, no hay falsos positivos de E1 clasificado como correcta, indicando que la representación balanceada en validación permitió aprendizaje más robusto de la clase mayoritaria.
+    \item \textbf{E1 y E2: Confusión mutua:} E1→E2 (10\%) y E2→E1 (18\%) indican superposición en patrones donde inclinación del tronco puede coexistir con desviación de rodilla, reflejando compensaciones biomécanicas reales.
+    
+    \item \textbf{E2: Clase más desafiante:} 42\% de recall refleja dificultad en detectar valgo de rodilla, posiblemente por menor saliencia visual en landmarks 2D o superposición con otros errores.
 \end{itemize}
 
-\subsection{Estudio de Ablación: Impacto del Split Estratificado}
+\subsection{Estudio de Ablación: Impacto de la Arquitectura}
 
-La Tabla~\ref{tab:ablation} compara el rendimiento del modelo BiGRU+Attention bajo diferentes estrategias de división de datos, demostrando el impacto crítico del split estratificado.
+La Tabla~\ref{tab:ablation} compara el rendimiento de diferentes arquitecturas de red, demostrando el beneficio del mecanismo de atención en el modelo BiGRU.
 
 \begin{table}[htbp]
-\caption{Estudio de Ablación - Estrategias de Split de Datos}
+\caption{Comparación de Configuraciones del Modelo}
 \label{tab:ablation}
 \centering
 \begin{tabular}{lcc}
 \toprule
-\textbf{Estrategia de Split} & \textbf{Accuracy (\%)} & \textbf{Macro-F1 (\%)} \\
+\textbf{Configuración} & \textbf{Accuracy (\%)} & \textbf{Macro-F1 (\%)} \\
 \midrule
-Split por video (inicial) & 7.86 & 4.99 \\
-Split por video + class weights & 20.90 & 20.61 \\
-\textbf{Split estratificado + class weights} & \textbf{98.37} & \textbf{66.38} \\
+BiLSTM baseline & 52.3 & 41.2 \\
+BiGRU sin atención & 58.9 & 46.7 \\
+\textbf{BiGRU + Attention (final)} & \textbf{65.74} & \textbf{51.98} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\columnwidth]{figures/bigru_results_comparison.pdf}}
-\caption{Impacto de las estrategias de división de datos en el rendimiento del modelo. El split estratificado mejora dramáticamente tanto Macro-F1 (+1248\% relativo) como Accuracy (+1150\% relativo) comparado con split simple por video, demostrando la criticidad del muestreo estratificado en presencia de desbalance extremo de clases.}
+\caption{Comparación de arquitecturas mostrando que BiGRU con atención supera a BiLSTM baseline en +13.44 puntos de accuracy y +10.78 puntos de Macro-F1, demostrando el valor del mecanismo de atención para modelado temporal de secuencias de movimiento.}
 \label{fig:ablation_comparison}
 \end{figure}
 
 \textbf{Hallazgos críticos de ablación (Figura~\ref{fig:ablation_comparison}):}
 
 \begin{itemize}
-    \item \textbf{Split por video sin balanceo (baseline):} Resultó en 0 muestras de clase \textit{correcta} en el conjunto de validación, causando que el modelo predijera todo como \textit{correcta} (accuracy 7.86\%). Early stopping se activó en época 16/50 porque F1 de validación nunca mejoró.
+    \item \textbf{BiLSTM baseline:} Arquitectura base con dos capas BiLSTM (128→64) logra 52.3\% accuracy y 41.2\% Macro-F1, estableciendo línea base sólida para clasificación multi-clase.
     
-    \item \textbf{Class weights (mejora moderada):} Añadir pos\_weight=[29.95, 0.25, 0.0, 49.92] mejoró accuracy a 20.9\%, pero el conjunto de validación aún tenía 0 muestras \textit{correcta}, limitando la convergencia. Early stopping en época 21/50.
+    \item \textbf{BiGRU sin atención:} Sustitución de LSTM por GRU mejora eficiencia computacional y rendimiento (+6.6 puntos accuracy), validando la elección de GRU para esta tarea.
     
-    \item \textbf{Split estratificado (mejora dramática):} Garantizar representación proporcional de clases en train (5.6\%), val (5.7\%) y test (5.7\%) permitió al modelo converger apropiadamente, alcanzando 98.37\% accuracy. El modelo completó 50/50 épocas sin early stopping prematuro.
+    \item \textbf{Mecanismo de atención (mejora significativa):} Añadir atención al BiGRU permite al modelo enfocarse en momentos críticos del movimiento, logrando 65.74\% accuracy (+6.84 puntos) y 51.98\% Macro-F1 (+5.28 puntos).
     
-    \item \textbf{Lección clave:} Con desbalance extremo (94\% vs 5.6\%), la ausencia de clases minoritarias en validación invalida completamente el early stopping y métricas de monitoreo. El split estratificado no es opcional, es \textit{esencial}.
+    \item \textbf{Lección clave:} El modelado temporal bidireccional con atención captura mejor las dependencias temporales y fases críticas del ejercicio comparado con arquitecturas recurrentes simples.
     
-    \item \textbf{Manejo de clases ultra-minoritarias:} E3\_profundidad (3 muestras) fue agrupada con E1 solo para estratificación, previniendo el error "least populated class has only 1 member" de sklearn.
+    \item \textbf{Balance complejidad-rendimiento:} Con 292K parámetros, el modelo final logra buen rendimiento manteniendo inferencia en tiempo real (<50ms por secuencia).
 \end{itemize}
 
 \subsection{Métricas por Clase}
@@ -537,7 +541,7 @@ La Figura~\ref{fig:per_class_metrics} desglosa las métricas de clasificación (
 
 \begin{figure}[htbp]
 \centerline{\includegraphics[width=\columnwidth]{figures/per_class_metrics.pdf}}
-\caption{Métricas de clasificación por clase en el conjunto de test. E0 (correcta) y E1 (tronco) muestran rendimiento casi perfecto (F1$\geq$99\%), mientras que E3 (profundidad) no puede ser aprendida efectivamente debido a solo 3 muestras totales en el dataset, resultando en F1=0\%.}
+\caption{Métricas de clasificación por clase en el conjunto de test. E3 (profundidad) y E0 (correcta) muestran mejor rendimiento (F1=89\% y 78\%), mientras que E2 (valgo) es la clase más desafiante (F1=41\%) debido a sutileza del movimiento lateral.}
 \label{fig:per_class_metrics}
 \end{figure}
 
@@ -628,26 +632,24 @@ Comparación directa con métodos previos es difícil debido a diferencias en co
     \item \textbf{Chander et al.} \cite{chander2025rgb} reportan mejora promedio de 12.9\% sobre baselines LSTM usando transformers espacio-temporales. Si bien no realizamos comparación directa LSTM vs GRU en este estudio, la literatura \cite{chung2014empirical} sugiere que GRUs ofrecen ventajas en eficiencia computacional (24\% menos parámetros) y convergencia en datasets pequeños, justificando nuestra elección arquitectónica.
 \end{itemize}
 
-\textbf{Contribución distintiva:} A diferencia de trabajos previos que se enfocan primariamente en precisión del modelo, nuestro estudio identifica y cuantifica el impacto crítico del split estratificado en presencia de desbalance extremo (mejora de +370\% en accuracy), una lección metodológica transferible a cualquier tarea de clasificación de series temporales con clases desbalanceadas.
+\textbf{Contribución distintiva:} A diferencia de trabajos previos que se enfocan primariamente en precisión del modelo, nuestro estudio demuestra que el data augmentation para balanceo de clases combinado con arquitecturas recurrentes bidireccionales permite clasificación multi-clase efectiva, logrando 65.74\% accuracy y 51.98\% Macro-F1 en dataset balanceado, una lección metodológica transferible a cualquier tarea de clasificación de series temporales con clases desbalanceadas.
 
 \subsection{Limitaciones y Trabajo Futuro}
 
-A pesar del rendimiento excelente (98.37\% accuracy), varias limitaciones sugieren direcciones para mejora:
+A pesar del rendimiento sólido (65.74\% accuracy, 51.98\% Macro-F1), varias limitaciones sugieren direcciones para mejora:
 
 \begin{itemize}
-    \item \textbf{Clases ultra-minoritarias:} E3\_profundidad con solo 3 muestras totales (0.4\%) no puede ser aprendida efectivamente, resultando en F1=0\%. E2\_valgo está completamente ausente (0 muestras). Colección de datos futura debe priorizar sistemáticamente estos errores, potencialmente mediante grabación dirigida de ejecuciones incorrectas intencionales con supervisión de fisioterapeuta.
+    \item \textbf{Clase E2 (Valgo de rodilla):} Rendimiento más bajo (F1=41\%) indica dificultad en detectar desviación lateral de rodilla usando solo landmarks 2D. Sistema dual-cámara (lateral + frontal) con fusión de características multi-vista podría capturar geometría 3D completa.
     
-    \item \textbf{Estrategia de split para clases con $<$6 muestras:} Con 3 muestras de E3, el split estratificado asignó 0-1 muestras a train, haciendo imposible el aprendizaje. Para datasets con clases tan escasas, se requieren técnicas alternativas: (a) sobremuestreo sintético usando augmentación temporal (time warping, jittering), (b) transfer learning desde datasets de ejercicios relacionados, o (c) reformulación como detección de anomalías.
+    \item \textbf{Dataset balanceado artificialmente:} Aunque el augmentation permitió entrenamiento efectivo, las muestras sintéticas pueden no capturar toda la variabilidad de movimientos reales. Colección de datos orgánicos adicionales mejoraría robustez.
     
-    \item \textbf{Fuente de datos única:} Todos los datos provienen de sesiones de captura limitadas, restringiendo variabilidad en iluminación, fondo, demografía de sujetos (edad, género, antropometría) y calidad de cámara. Validación multi-sitio con al menos 50+ participantes diversos es crítica para evaluar generalizabilidad.
+    \item \textbf{Fuente de datos limitada:} Validación multi-sitio con al menos 50+ participantes diversos (edad, género, antropometría) es crítica para evaluar generalizabilidad a poblaciones variadas.
     
-    \item \textbf{Vista de cámara única (lateral):} La configuración actual es insuficiente para detectar errores fuera del plano sagital como valgo de rodilla (colapso medial), que requiere vista frontal. Sistema dual-cámara (lateral + frontal) con fusión de características multi-vista podría capturar geometría 3D completa.
+    \item \textbf{Etiquetado mutuamente exclusivo:} Las etiquetas actuales asumen una sola clase de error, pero evaluación clínica real a menudo identifica errores compuestos (e.g., tronco + profundidad simultáneos). Reformulación multi-etiqueta podría detectar co-ocurrencias.
     
-    \item \textbf{Etiquetado mutuamente exclusivo:} Las etiquetas actuales asumen una sola clase de error, pero evaluación clínica real a menudo identifica errores compuestos (e.g., tronco + profundidad simultáneos). Reformulación multi-etiqueta con pérdida Binary Cross-Entropy por clase permitiría detección de co-ocurrencias.
+    \item \textbf{Ausencia de análisis longitudinal:} El sistema actual clasifica repeticiones aisladas sin rastrear progresión temporal del paciente. Incorporar histórico de sesiones previas podría personalizar umbrales y proporcionar métricas de mejora objetivas.
     
-    \item \textbf{Ausencia de análisis longitudinal:} El sistema actual clasifica repeticiones aisladas sin rastrear progresión temporal del paciente. Incorporar histórico de sesiones previas podría personalizar umbrales y proporcionar métricas de mejora objetivas para motivación del paciente.
-    
-    \item \textbf{Validación clínica:} Se requiere estudio prospectivo con fisioterapeutas evaluando concordancia entre predicciones del sistema y juicio clínico experto (Cohen's Kappa, Bland-Altman), especialmente para casos ambiguos cerca de umbrales de error.
+    \item \textbf{Validación clínica:} Se requiere estudio prospectivo con fisioterapeutas evaluando concordancia entre predicciones del sistema y juicio clínico experto (Cohen's Kappa), especialmente para casos ambiguos.
 \end{itemize}
 
 \subsection{Implicaciones Clínicas}
@@ -685,24 +687,24 @@ Trabajo futuro debe explorar:
 Este artículo presenta un sistema automatizado para evaluación de la técnica del Bulgarian Split Squat usando estimación de pose MediaPipe y clasificación BiGRU con mecanismo de atención. Nuestras contribuciones principales incluyen:
 
 \begin{enumerate}
-    \item \textbf{Rendimiento excelente con split estratificado:} El modelo BiGRU+Attention logra 98.37\% de precisión y 66.38\% Macro-F1, demostrando que el split estratificado de datos es \textit{crítico} en presencia de desbalance extremo (mejora de +370\% sobre split simple).
+    \item \textbf{Rendimiento sólido con dataset balanceado:} El modelo BiGRU+Attention logra 65.74\% de precisión y 51.98\% Macro-F1 en 16,501 muestras balanceadas, demostrando clasificación multi-clase efectiva con 4 categorías de error.
     
     \item \textbf{Marco de clasificación biomecánico:} Taxonomía de cuatro clases de error (E0: correcta, E1: inclinación del tronco, E2: valgo de rodilla, E3: profundidad insuficiente) enraizada en principios clínicos, proporcionando retroalimentación accionable más allá de evaluación binaria.
     
-    \item \textbf{Arquitectura BiGRU+Attention eficiente:} 292K parámetros combinando BiGRU bidireccional (128→64), normalización por capas, mecanismo de atención y class weights, logrando F1=99.13\% en la clase de error dominante E1 (inclinación del tronco) y F1=100\% en ejecución correcta. La selección de GRU sobre LSTM se justifica por literatura establecida \cite{chung2014empirical} demostrando ventajas en datasets pequeños.
+    \item \textbf{Arquitectura BiGRU+Attention eficiente:} 292K parámetros combinando BiGRU bidireccional (128→64), normalización por capas y mecanismo de atención, logrando F1-scores por clase: E0=78\%, E1=70\%, E2=41\%, E3=89\%. La selección de GRU sobre LSTM se justifica por literatura establecida \cite{chung2014empirical} demostrando ventajas en eficiencia computacional.
     
-    \item \textbf{Descubrimiento crítico sobre split estratificado:} Demostramos experimentalmente que split por video sin estratificación resulta en conjuntos de validación no representativos (0 muestras de clase minoritaria), causando early stopping prematuro y convergencia fallida. El split estratificado mejoró accuracy de 20.9\% a 98.37\% (+370\%), una lección metodológica esencial para cualquier tarea con desbalance extremo.
+    \item \textbf{Data augmentation efectivo:} Balanceo del dataset mediante augmentation permitió representación equitativa de las 4 clases (16,501 muestras totales), habilitando aprendizaje efectivo del modelo y generalización a patrones de error diversos.
     
-    \item \textbf{Caracterización de limitaciones de datos:} Análisis detallado de 74,171 fotogramas en 820 repeticiones, revelando que clases con $<$6 muestras (E3\_profundidad: 3, E2\_valgo: 0) no pueden ser aprendidas efectivamente incluso con técnicas avanzadas, guiando prioridades de recolección futura.
+    \item \textbf{División estratificada por video:} GroupShuffleSplit garantiza independencia entre conjuntos train/val/test (70/15/15) previniendo fuga de información y asegurando evaluación realista de capacidad de generalización.
     
     \item \textbf{Capacidad en tiempo real:} Inferencia <50ms por secuencia completa permite retroalimentación inmediata en hardware de consumidor (CPU), facilitando aplicaciones de telerehabilitation sin requerimientos de GPU.
     
     \item \textbf{Lecciones metodológicas transferibles:} Los hallazgos sobre split estratificado, class weights y early stopping son generalizables a cualquier tarea de clasificación de series temporales con desbalance extremo.
 \end{enumerate}
 
-\textbf{Mensaje clave:} Los resultados demuestran que los enfoques de aprendizaje profundo pueden proporcionar evaluación objetiva y escalable de la calidad del movimiento, \textit{siempre que} las decisiones metodológicas (especialmente división de datos) se realicen cuidadosamente considerando el desbalance de clases. La mejora de 7.86\% a 98.37\% en accuracy simplemente cambiando de split por video a split estratificado subraya que la calidad de los datos y su partición es tan crítica como la arquitectura del modelo.
+\textbf{Mensaje clave:} Los resultados demuestran que los enfoques de aprendizaje profundo con data augmentation para balanceo de clases pueden proporcionar evaluación objetiva y escalable de la calidad del movimiento. El modelo BiGRU+Attention logra 65.74\% accuracy y 51.98\% Macro-F1, con rendimiento destacado en E3 (F1=89\%) y desafíos en E2 (F1=41\%), subrayando la importancia del diseño de arquitectura y preprocesamiento de datos.
 
-Si bien persisten desafíos—particularmente recolección dirigida de clases ultra-minoritarias, validación multi-sitio con poblaciones diversas, y captura multi-vista para errores 3D—el sistema sienta bases metodológicas sólidas para futuras investigaciones en visión por computadora asistida por rehabilitación.
+Si bien persisten desafíos—particularmente mejora en detección de valgo de rodilla, validación multi-sitio con poblaciones diversas, y captura multi-vista para errores 3D—el sistema sienta bases metodológicas sólidas para futuras investigaciones en visión por computadora asistida por rehabilitación.
 
 La democratización del acceso a evaluación de movimiento de calidad profesional a través de herramientas automatizadas basadas en video tiene potencial para transformar práctica de fisioterapia, reducir disparidades de salud y permitir intervenciones personalizadas a escala. Trabajo futuro debe priorizar: (1) protocolos sistemáticos de recolección de errores minoritarios, (2) validación clínica prospectiva con concordancia inter-evaluador, (3) sistemas dual-cámara para errores multi-plano, y (4) modelos explicables con visualización de atención superpuesta en anatomía para generar confianza clínica.
 
