@@ -15,9 +15,6 @@
 \usepackage{float}
 \usepackage{hyperref}
 
-% Configurar ruta de figuras
-\graphicspath{{../figures/}}
-
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -138,7 +135,7 @@ Esta sección describe la arquitectura del sistema propuesto, construcción del 
 La Figura~\ref{fig:system_architecture} ilustra el pipeline completo del sistema propuesto. El sistema comprende cuatro módulos principales: (1) \textit{Adquisición de Video}, donde video RGB se captura a 30 FPS usando una cámara de consumidor; (2) \textit{Estimación de Pose}, aprovechando MediaPipe Pose para extraer 33 puntos de referencia 3D por fotograma; (3) \textit{Extracción de Características}, computando atributos biomecánicos y normalizando coordenadas; y (4) \textit{Clasificación}, donde un modelo BiGRU entrenado predice etiquetas de error con puntajes de confianza asociados.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{architecture_diagram.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{../figures/architecture_diagram.pdf}}
 \caption{Pipeline completo del sistema desde adquisición de video hasta clasificación de errores. El flujo incluye: captura RGB → estimación de pose MediaPipe (33 landmarks) → extracción de características biomecánicas (ángulos, ROM, jerk) → clasificación BiGRU+Attention → predicción de clase de error con scores de confianza.}
 \label{fig:system_architecture}
 \end{figure}
@@ -172,7 +169,7 @@ El conjunto de datos final balanceado comprende 16,501 muestras distribuidas ent
 El dataset fue balanceado mediante técnicas de data augmentation para garantizar representación equitativa de todas las clases. Los datos se dividieron 70/15/15 para entrenamiento (11,551), validación (2,475) y prueba (2,475) usando \textbf{GroupShuffleSplit por video\_id} para garantizar independencia entre conjuntos y prevenir fuga de información.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.9\columnwidth]{dataset_distribution.pdf}}
+\centerline{\includegraphics[width=0.9\columnwidth]{../figures/dataset_distribution.pdf}}
 \caption{Distribución de clases en el conjunto de datos balanceado mostrando representación equitativa de las 4 categorías de error mediante data augmentation (16,501 muestras totales).}
 \label{fig:dataset_distribution}
 \end{figure}
@@ -271,7 +268,7 @@ El clasificador BiGRU+Attention representa la arquitectura final del sistema, se
 \end{itemize}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.7\columnwidth]{bigru_architecture.pdf}}
+\centerline{\includegraphics[width=0.7\columnwidth]{../figures/bigru_architecture.pdf}}
 \caption{Arquitectura BiGRU+Attention mostrando el flujo desde la entrada (T×66) hasta la salida de 4 clases. El modelo utiliza dos capas BiGRU (128→64 unidades ocultas), normalización por capas, dropout y mecanismo de atención para 292K parámetros totales.}
 \label{fig:bigru_architecture}
 \end{figure}
@@ -415,7 +412,7 @@ Tiempo inferencia & <50ms & Por secuencia completa \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{bigru_comparison_training.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{../figures/bigru_comparison_training.pdf}}
 \caption{Curvas de entrenamiento del modelo BiGRU+Attention a través de 50 epochs. La línea vertical verde indica la época con mejor F1 de validación (época 9, F1=60.68\%). El modelo muestra convergencia estable con regularización efectiva mediante dropout y early stopping.}
 \label{fig:training_curves}
 \end{figure}
@@ -464,8 +461,8 @@ E3 (Profundidad) & 90 & 88 & 89 & Variable \\
 La Figura~\ref{fig:confusion_matrix} presenta la matriz de confusión para BiGRU+Attention, mostrando tanto valores absolutos como proporciones normalizadas por fila (recall).
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{confusion_matrix_normalized.pdf}}
-\caption{Matriz de confusión del modelo BiGRU+Attention en el conjunto de test balanceado. Izquierda: valores absolutos. Derecha: normalizada por fila (recall). El modelo muestra mejor rendimiento en E0 y E3, con confusiones principales entre E1 y E2 debido a similitudes en patrones de movimiento.}
+\centerline{\includegraphics[width=\columnwidth]{../figures/confusion_matrix_normalized.pdf}}
+\caption{Matriz de confusión normalizada del modelo BiGRU+Attention en el conjunto de test (2,475 muestras). El modelo muestra mejor rendimiento en E3 (profundidad, 88\% recall) y E0 (correcta, 77\% recall), con confusiones principales entre E1-E2 debido a superposición de patrones biomecánicos donde inclinación del tronco puede coexistir con desviación de rodilla.}
 \label{fig:confusion_matrix}
 \end{figure}
 
@@ -519,7 +516,7 @@ BiGRU sin atención & 58.9 & 46.7 \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{bigru_results_comparison.pdf}}
+\centerline{\includegraphics[width=\columnwidth]{../figures/bigru_results_comparison.pdf}}
 \caption{Comparación de arquitecturas mostrando que BiGRU con atención supera a BiLSTM baseline en +13.44 puntos de accuracy y +10.78 puntos de Macro-F1, demostrando el valor del mecanismo de atención para modelado temporal de secuencias de movimiento.}
 \label{fig:ablation_comparison}
 \end{figure}
@@ -543,17 +540,19 @@ BiGRU sin atención & 58.9 & 46.7 \\
 La Figura~\ref{fig:per_class_metrics} desglosa las métricas de clasificación (precisión, recall y F1-score) para cada clase de error presente en el conjunto de test.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{per_class_metrics.pdf}}
-\caption{Métricas de clasificación por clase en el conjunto de test. E3 (profundidad) y E0 (correcta) muestran mejor rendimiento (F1=89\% y 78\%), mientras que E2 (valgo) es la clase más desafiante (F1=41\%) debido a sutileza del movimiento lateral.}
+\centerline{\includegraphics[width=\columnwidth]{../figures/per_class_metrics.pdf}}
+\caption{Métricas de clasificación por clase en el conjunto de test. E3 (profundidad) muestra mejor rendimiento (F1=89\%, P=90\%, R=88\%), seguido de E0 (correcta, F1=78\%) y E1 (tronco, F1=70\%). E2 (valgo) es la clase más desafiante (F1=41\%) debido a sutileza del movimiento lateral y limitaciones de estimación 2D.}
 \label{fig:per_class_metrics}
 \end{figure}
 
 \textbf{Insights de rendimiento por clase:}
 
 \begin{itemize}
-    \item \textbf{E0 y E1 (clases principales):} Rendimiento casi perfecto con F1$\geq$99\%, demostrando que el modelo distingue exitosamente entre ejecución correcta e inclinación excesiva del tronco cuando hay datos suficientes (46 y 771 muestras respectivamente).
+    \item \textbf{E3 (Profundidad insuficiente):} Mejor clase con F1=89\%, demostrando que el modelo captura efectivamente patrones de ROM limitado en ángulos de rodilla y cadera durante la fase de máxima flexión.
     
-    \item \textbf{E3 (clase ultra-minoritaria):} Rendimiento nulo (F1=0\%) refleja la imposibilidad matemática de aprendizaje con solo 3 muestras totales, de las cuales 0 quedaron en train después del split estratificado. Esto subraya la necesidad crítica de al menos 50-100 ejemplos por clase para aprendizaje supervisado efectivo.
+    \item \textbf{E0 y E1 (Correcta y Tronco):} Rendimiento sólido a moderado (F1=78\% y 70\%), indicando buena capacidad de distinguir entre ejecución correcta e inclinaciones sutiles del tronco, aunque persiste confusión del 12\% entre ambas clases.
+    
+    \item \textbf{E2 (Valgo de rodilla):} Clase desafiante (F1=41\%) debido a: (1) movimiento lateral sutil difícil de capturar con estimación 2D, (2) confusión con E1 (18\%) por compensaciones biomecánicas donde valgo coexiste con inclinación del tronco, (3) menor saliencia visual en landmarks de rodilla comparado con ángulos de tronco o profundidad.
 \end{itemize}
 
 \subsection{Análisis de Pesos de Atención}
@@ -561,8 +560,8 @@ La Figura~\ref{fig:per_class_metrics} desglosa las métricas de clasificación (
 El mecanismo de atención en el modelo BiGRU+Attention permite visualizar qué pasos temporales (fotogramas) del ciclo de movimiento son más relevantes para la clasificación de cada error. La Figura~\ref{fig:attention_weights} muestra los pesos de atención promedio a través de la secuencia temporal para las clases presentes en el dataset.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=\columnwidth]{attention_weights_visualization.pdf}}
-\caption{Visualización de pesos de atención promedio a través de pasos temporales para cada clase de error. El mecanismo de atención aprende a enfocarse en fases críticas del movimiento: E0 (correcta) distribuye atención uniformemente, E1 (tronco) se concentra en la fase descendente donde la inclinación es más pronunciada, y E3 (profundidad) atiende al punto de máxima flexión.}
+\centerline{\includegraphics[width=\columnwidth]{../figures/attention_weights_visualization.pdf}}
+\caption{Visualización de pesos de atención promedio a través de pasos temporales para cada clase de error. El mecanismo de atención aprende a enfocarse en fases críticas del movimiento: E0 (correcta) distribuye atención uniformemente, E1 (tronco) se concentra en la fase descendente donde la inclinación es más pronunciada, E2 (valgo) atiende momentos de desviación lateral de rodilla, y E3 (profundidad) se enfoca en el punto de máxima flexión.}
 \label{fig:attention_weights}
 \end{figure}
 
@@ -609,17 +608,17 @@ Este rendimiento permite procesamiento en tiempo real en hardware de consumidor 
 
 \subsection{Interpretación de Resultados}
 
-El modelo BiGRU+Attention logra \textbf{98.37\% de precisión} y \textbf{66.38\% Macro-F1}, demostrando capacidad excelente para clasificar correctamente ejecuciones del Bulgarian Split Squat. El rendimiento casi perfecto en E1 (F1=99.13\%) y E0 (F1=100\%) indica que el sistema detecta confiablemente tanto la ejecución correcta como el patrón de error más común (inclinación del tronco), proporcionando valor práctico inmediato para retroalimentación correctiva en rehabilitación.
+El modelo BiGRU+Attention logra \textbf{65.74\% de precisión} y \textbf{51.98\% Macro-F1}, demostrando capacidad sólida para clasificación multi-clase en presencia de patrones de movimiento complejos y superpuestos. El rendimiento destacado en E3 (F1=89\%) y E0 (F1=78\%) indica que el sistema detecta confiablemente profundidad insuficiente y ejecución correcta, proporcionando valor práctico para retroalimentación correctiva en rehabilitación.
 
-\textbf{Impacto crítico del split estratificado:} El hallazgo más significativo de este estudio es la importancia \textit{absoluta} del muestreo estratificado en presencia de desbalance extremo de clases (94\% vs 5.6\%). Experimentos iniciales usando split simple por video resultaron en conjuntos de validación sin ninguna muestra de la clase minoritaria \textit{correcta}, causando:
+\textbf{Impacto crítico del data augmentation:} El hallazgo más significativo de este estudio es la efectividad del balanceo de clases mediante augmentation para habilitar aprendizaje efectivo en clasificación multi-clase. Al crear 16,501 muestras balanceadas (25\% por clase) a partir de datos originales desbalanceados, el modelo logró:
 
 \begin{enumerate}
-    \item Early stopping prematuro (época 16-21 de 50) basado en métricas de validación no representativas
-    \item Predicciones colapsadas hacia la clase mayoritaria (accuracy 7.86-20.9\%)
-    \item Imposibilidad de monitorear aprendizaje real de clases minoritarias
+    \item Aprendizaje efectivo de las 4 clases sin colapso hacia la clase mayoritaria
+    \item Convergencia estable en época 9/50 con early stopping apropiado
+    \item Representación equitativa en train/val/test mediante GroupShuffleSplit por video\_id
 \end{enumerate}
 
-La implementación de split estratificado, que garantiza representación proporcional de todas las clases en train/val/test, mejoró accuracy de 20.9\% a 98.37\% (+370\% relativo), permitiendo convergencia apropiada sin early stopping prematuro.
+El dataset balanceado combinado con división estratificada permitió que el modelo aprenda características distintivas de todas las clases, logrando F1-scores diferenciados: E3=89\%, E0=78\%, E1=70\%, E2=41\%.
 
 \textbf{Justificación de elecciones arquitectónicas:} La selección de GRU sobre LSTM se fundamenta en estudios previos \cite{chung2014empirical} que demuestran mejor generalización de GRUs en datasets pequeños debido a su arquitectura simplificada (2 gates vs 3), reduciendo parámetros en 24\%. La normalización por capas (Layer Normalization) es crítica para estabilizar el entrenamiento de redes recurrentes con secuencias de longitud variable, abordando el problema de desplazamiento de covarianza interna. El mecanismo de atención, además de mejorar rendimiento, proporciona interpretabilidad crucial para adopción clínica al visualizar qué fases del movimiento son más relevantes para cada tipo de error.
 
@@ -628,11 +627,11 @@ La implementación de split estratificado, que garantiza representación proporc
 Comparación directa con métodos previos es difícil debido a diferencias en conjuntos de datos, taxonomías de error y protocolos de evaluación. Sin embargo, contextualizamos nuestro rendimiento contra trabajo relacionado:
 
 \begin{itemize}
-    \item \textbf{Simoes et al.} \cite{simoes2024accuracy} reportan 99.22\% de precisión para ejercicios de extremidad superior usando KNN con puntos de referencia MediaPipe. Su tarea es más simple (2 clases, movimientos restringidos) vs. nuestro enfoque multiclase con dinámicas complejas de tren inferior. Nuestro 98.37\% accuracy es competitivo considerando la mayor complejidad.
+    \item \textbf{Simoes et al.} \cite{simoes2024accuracy} reportan 99.22\% de precisión para ejercicios de extremidad superior usando KNN con puntos de referencia MediaPipe. Su tarea es más simple (2 clases, movimientos restringidos) vs. nuestro enfoque multiclase con dinámicas complejas de tren inferior. Nuestro 65.74\% accuracy refleja la mayor complejidad de distinguir entre 4 clases de patrones de movimiento superpuestos.
     
-    \item \textbf{Mennella et al.} \cite{mennella2023deep} logran 89\% de precisión para clasificación de ROM (rango de movimiento) y 98\% para detección de patrones compensatorios usando CNNs. Su enfoque procesa fotogramas individuales vs. nuestro modelado explícito de secuencias temporales, que captura dinámicas de movimiento completas.
+    \item \textbf{Mennella et al.} \cite{mennella2023deep} logran 89\% de precisión para clasificación de ROM (rango de movimiento) y 98\% para detección de patrones compensatorios usando CNNs. Su enfoque procesa fotogramas individuales vs. nuestro modelado explícito de secuencias temporales, que captura dinámicas de movimiento completas pero enfrenta mayor complejidad en clasificación multi-clase.
     
-    \item \textbf{Chander et al.} \cite{chander2025rgb} reportan mejora promedio de 12.9\% sobre baselines LSTM usando transformers espacio-temporales. Si bien no realizamos comparación directa LSTM vs GRU en este estudio, la literatura \cite{chung2014empirical} sugiere que GRUs ofrecen ventajas en eficiencia computacional (24\% menos parámetros) y convergencia en datasets pequeños, justificando nuestra elección arquitectónica.
+    \item \textbf{Chander et al.} \cite{chander2025rgb} reportan mejora promedio de 12.9\% sobre baselines LSTM usando transformers espacio-temporales. Nuestro estudio de ablación muestra mejora similar (+13.44 puntos accuracy) de BiGRU+Attention sobre BiLSTM baseline, validando el valor de mecanismos de atención para modelado temporal de ejercicios.
 \end{itemize}
 
 \textbf{Contribución distintiva:} A diferencia de trabajos previos que se enfocan primariamente en precisión del modelo, nuestro estudio demuestra que el data augmentation para balanceo de clases combinado con arquitecturas recurrentes bidireccionales permite clasificación multi-clase efectiva, logrando 65.74\% accuracy y 51.98\% Macro-F1 en dataset balanceado, una lección metodológica transferible a cualquier tarea de clasificación de series temporales con clases desbalanceadas.
