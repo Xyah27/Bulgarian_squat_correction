@@ -1,0 +1,71 @@
+{
+  "model_info": {
+    "nombre": "BiGRU + Attention - Bulgarian Squat Classifier",
+    "framework": "PyTorch",
+    "arquitectura": "BiGRUClassifierImproved",
+    "parametros_totales": 292041,
+    "mejor_epoch": 9,
+    "metricas": {
+      "f1_score_macro": 0.5198,
+      "f1_score_micro": 0.5838,
+      "accuracy": 0.6574
+    },
+    "descripcion": "Modelo BiGRU con mecanismo de atenciÃ³n para clasificaciÃ³n de ejercicios Bulgarian Split Squat. Clasifica entre ejecuciÃ³n correcta y 3 tipos de errores comunes."
+  },
+  "test_metrics": {
+    "accuracy": 0.5082568807339449,
+    "f1_score_macro": 0.33781484793565847,
+    "f1_score_micro": 0.5082568807339449,
+    "num_samples": 2180
+  },
+  "per_class_metrics": {
+    "classes": [
+      "correcta",
+      "E1_tronco"
+    ],
+    "precision": [
+      0.5,
+      0.5082644628099173
+    ],
+    "recall": [
+      0.0009328358208955224,
+      0.9990974729241877
+    ],
+    "f1_score": [
+      0.00186219739292365,
+      0.6737674984783932
+    ],
+    "support": [
+      1072,
+      1108
+    ]
+  },
+  "confusion_matrix": {
+    "absolute": [
+      [
+        1,
+        1071
+      ],
+      [
+        1,
+        1107
+      ]
+    ],
+    "normalized": [
+      [
+        0.0009328358208955224,
+        0.9990671641791045
+      ],
+      [
+        0.0009025270758122744,
+        0.9990974729241877
+      ]
+    ]
+  },
+  "data_split": {
+    "train_samples": 6550,
+    "val_samples": 7771,
+    "test_samples": 2180,
+    "total_samples": 16501
+  }
+}

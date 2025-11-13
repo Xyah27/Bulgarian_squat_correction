@@ -1,0 +1,13 @@
+{
+  "nombre": "BiGRU + Attention - Bulgarian Squat Classifier",
+  "framework": "PyTorch",
+  "arquitectura": "BiGRUClassifierImproved",
+  "parametros_totales": 292041,
+  "mejor_epoch": 9,
+  "metricas": {
+    "f1_score_macro": 0.5198,
+    "f1_score_micro": 0.5838,
+    "accuracy": 0.6574
+  },
+  "descripcion": "Modelo BiGRU con mecanismo de atención para clasificación de ejercicios Bulgarian Split Squat. Clasifica entre ejecución correcta y 3 tipos de errores comunes."
+}
