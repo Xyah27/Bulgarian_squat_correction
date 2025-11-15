@@ -346,12 +346,6 @@ Las contribuciones son bienvenidas! Por favor:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📧 Contacto
-
-- **Autor**: Tu Nombre
-- **Email**: tu.email@example.com
-- **Proyecto**: [https://github.com/tu-usuario/bulgarian-split-squat](https://github.com/tu-usuario/bulgarian-split-squat)
-
 ## 🙏 Agradecimientos
 
 - **MediaPipe** por la detección de pose de alta calidad
